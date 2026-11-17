@@ -31,10 +31,10 @@ jobs:
           fi
 
       - name: Package
-        run: npx -y @vscode/vsce package -o claude-commit-msg.vsix
+        run: npx -y @vscode/vsce@4.1.1 package -o claude-commit-msg.vsix
 
       - name: Publish to VS Code Marketplace (trusted publishing)
-        run: npx -y @vscode/vsce publish --oidc
+        run: npx -y @vscode/vsce@4.1.1 publish --oidc
 
       - name: Create GitHub release with the .vsix
         if: github.ref_type == 'tag'
