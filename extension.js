@@ -40,7 +40,7 @@ async function selectModel() {
   const cfg = vscode.workspace.getConfiguration('claudeCommitMsg');
   const current = cfg.get('model');
   // reuse the dropdown values from package.json so the list lives in one place
-  const schema = vscode.extensions.getExtension('yurtemre7.claude-commit-msg').packageJSON.contributes.configuration.properties['claudeCommitMsg.model'];
+  const schema = vscode.extensions.getExtension('yurtemre.claude-commit-msg').packageJSON.contributes.configuration.properties['claudeCommitMsg.model'];
   const items = schema.enum.map((id, i) => ({ label: id, description: schema.enumDescriptions[i] + (id === current ? '  ✓ current' : '') }));
   items.push({ label: 'Custom model ID…', description: 'Any ID or alias accepted by `claude --model`', custom: true });
   const pick = await vscode.window.showQuickPick(items, { placeHolder: `Model for commit messages (current: ${current})` });

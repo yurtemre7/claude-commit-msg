@@ -3,7 +3,7 @@
   "displayName": "Claude Commit Message",
   "description": "Generate git commit messages from your diff with your local Claude Code CLI (Haiku by default).",
   "version": "0.1.0",
-  "publisher": "yurtemre7",
+  "publisher": "yurtemre",
   "license": "MIT",
   "icon": "images/icon.png",
   "galleryBanner": {

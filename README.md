@@ -31,7 +31,7 @@ Then run **Developer: Reload Window** in VS Code.
 If the `code` command isn't available, open the Extensions view in VS Code, click **⋯** at the top and choose **Install from VSIX…**, then select the `.vsix` file.
 
 **Updating:** run `git pull`, build again, and add `--force` to the install command.
-**Uninstalling:** `code --uninstall-extension yurtemre7.claude-commit-msg`, or uninstall it from the Extensions view.
+**Uninstalling:** `code --uninstall-extension yurtemre.claude-commit-msg`, or uninstall it from the Extensions view.
 
 ## Usage
 
