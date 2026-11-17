@@ -1,6 +1,6 @@
-<p align="center"><img src="images/icon.png" width="128" alt="Claude Commit Msg! icon"></p>
+<p align="center"><img src="images/icon.png" width="128" alt="claude: commit msg! icon"></p>
 
-# Claude Commit Msg!
+# claude: commit msg!
 
 Write git commit messages from your diff, using the [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI you already have installed. Click the ✨ button in Source Control and the message lands in the commit box.
 

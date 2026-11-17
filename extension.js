@@ -7,16 +7,16 @@ async function generate(arg) {
   const git = vscode.extensions.getExtension('vscode.git').exports.getAPI(1);
   // the SCM title button passes its source control; otherwise use the first repo
   const repo = (arg && arg.rootUri && git.getRepository(arg.rootUri)) || git.repositories[0];
-  if (!repo) return vscode.window.showErrorMessage('Claude Commit Msg!: no git repository found.');
+  if (!repo) return vscode.window.showErrorMessage('claude: commit msg! No git repository found.');
   const cwd = repo.rootUri.fsPath;
 
   let diff;
   try {
     diff = await getDiff(cwd);
   } catch (e) {
-    return vscode.window.showErrorMessage('Claude Commit Msg!: git diff failed: ' + (e.stderr || e.message));
+    return vscode.window.showErrorMessage('claude: commit msg! git diff failed: ' + (e.stderr || e.message));
   }
-  if (!diff.trim()) return vscode.window.showInformationMessage('Claude Commit Msg!: no changes to describe.');
+  if (!diff.trim()) return vscode.window.showInformationMessage('claude: commit msg! No changes to describe.');
 
   const cfg = vscode.workspace.getConfiguration('claudeCommitMsg');
   await vscode.window.withProgress({ location: vscode.ProgressLocation.SourceControl, title: 'Claude is writing a commit message…' }, async () => {
@@ -27,8 +27,8 @@ async function generate(arg) {
     } catch (e) {
       const notFound = e.code === 127 || /command not found|no such file/i.test(e.stderr || '');
       const text = notFound
-        ? 'Claude Commit Msg!: the `claude` CLI was not found. Install Claude Code, or set its full path in settings.'
-        : 'Claude Commit Msg!: ' + ((e.stderr || '').trim() || e.message);
+        ? 'claude: commit msg! The `claude` CLI was not found. Install Claude Code, or set its full path in settings.'
+        : 'claude: commit msg! ' + ((e.stderr || '').trim() || e.message);
       const pick = await vscode.window.showErrorMessage(text, ...(notFound ? ['Install Claude Code'] : []), 'Open Settings');
       if (pick === 'Install Claude Code') vscode.env.openExternal(vscode.Uri.parse(INSTALL_URL));
       if (pick === 'Open Settings') vscode.commands.executeCommand('workbench.action.openSettings', 'claudeCommitMsg');
@@ -48,7 +48,7 @@ async function selectModel() {
   const model = pick.custom ? (await vscode.window.showInputBox({ prompt: 'Model ID or alias for claude --model', value: current }))?.trim() : pick.label;
   if (!model) return;
   await cfg.update('model', model, vscode.ConfigurationTarget.Global);
-  vscode.window.showInformationMessage(`Claude Commit Msg!: now using ${model}.`);
+  vscode.window.showInformationMessage(`claude: commit msg! Now using ${model}.`);
 }
 
 exports.activate = ctx => ctx.subscriptions.push(
