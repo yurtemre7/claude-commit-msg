@@ -1,6 +1,6 @@
 {
   "name": "claude-commit-msg",
-  "displayName": "Claude Commit Message",
+  "displayName": "Claude Commit Msg!",
   "description": "Generate git commit messages from your diff with your local Claude Code CLI (Haiku by default).",
   "version": "0.1.0",
   "publisher": "yurtemre",
@@ -71,7 +71,7 @@
       ]
     },
     "configuration": {
-      "title": "Claude Commit Message",
+      "title": "Claude Commit Msg!",
       "properties": {
         "claudeCommitMsg.prompt": {
           "type": "string",
