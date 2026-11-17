@@ -2,6 +2,12 @@
 
 All notable changes to this extension are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.2] - 2026-11-17
+
+### Changed
+
+- Republished 0.1.1 (the **claude: commit msg!** rename) after it did not appear on the Marketplace.
+
 ## [0.1.1] - 2026-11-17
 
 ### Changed
