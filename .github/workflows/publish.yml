@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write # create the GitHub release
+  id-token: write # OIDC token for Marketplace trusted publishing
 
 jobs:
   publish:
@@ -32,15 +33,8 @@ jobs:
       - name: Package
         run: npx -y @vscode/vsce package -o claude-commit-msg.vsix
 
-      - name: Publish to VS Code Marketplace
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
-        run: |
-          if [ -z "$VSCE_PAT" ]; then
-            echo "::error::Add the VSCE_PAT repository secret (Settings → Secrets and variables → Actions)"
-            exit 1
-          fi
-          npx -y @vscode/vsce publish --packagePath claude-commit-msg.vsix
+      - name: Publish to VS Code Marketplace (trusted publishing)
+        run: npx -y @vscode/vsce publish --oidc
 
       - name: Create GitHub release with the .vsix
         if: github.ref_type == 'tag'
