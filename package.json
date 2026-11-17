@@ -5,6 +5,11 @@
   "version": "0.1.0",
   "publisher": "yurtemre7",
   "license": "MIT",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#E07A4F",
+    "theme": "dark"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/yurtemre7/claude-commit-msg.git"
@@ -98,5 +103,8 @@
         }
       }
     }
+  },
+  "vsce": {
+    "dependencies": false
   }
 }

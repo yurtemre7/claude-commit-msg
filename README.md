@@ -1,3 +1,5 @@
+<p align="center"><img src="images/icon.png" width="128" alt="Claude Commit Message icon"></p>
+
 # Claude Commit Message
 
 Write git commit messages from your diff, using the [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI you already have installed. Click the ✨ button in Source Control and the message lands in the commit box.
@@ -12,6 +14,24 @@ Write git commit messages from your diff, using the [Claude Code](https://docs.a
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code/setup) installed and logged in. Check with `claude --version` in a terminal.
 - VS Code 1.80 or newer with the built-in Git extension enabled.
 - macOS or Linux. Windows is not supported yet.
+
+## Install locally
+
+The extension isn't on the Marketplace yet. To build and install it yourself (requires Node.js):
+
+```sh
+git clone https://github.com/yurtemre7/claude-commit-msg.git
+cd claude-commit-msg
+npx @vscode/vsce package
+code --install-extension claude-commit-msg-*.vsix
+```
+
+Then run **Developer: Reload Window** in VS Code.
+
+If the `code` command isn't available, open the Extensions view in VS Code, click **⋯** at the top and choose **Install from VSIX…**, then select the `.vsix` file.
+
+**Updating:** run `git pull`, build again, and add `--force` to the install command.
+**Uninstalling:** `code --uninstall-extension yurtemre7.claude-commit-msg`, or uninstall it from the Extensions view.
 
 ## Usage
 
