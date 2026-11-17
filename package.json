@@ -1,0 +1,102 @@
+{
+  "name": "claude-commit-msg",
+  "displayName": "Claude Commit Message",
+  "description": "Generate git commit messages from your diff with your local Claude Code CLI (Haiku by default).",
+  "version": "0.1.0",
+  "publisher": "yurtemre7",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yurtemre7/claude-commit-msg.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yurtemre7/claude-commit-msg/issues"
+  },
+  "homepage": "https://github.com/yurtemre7/claude-commit-msg#readme",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "AI"
+  ],
+  "keywords": [
+    "git",
+    "commit",
+    "commit message",
+    "claude",
+    "ai",
+    "conventional commits"
+  ],
+  "main": "./extension.js",
+  "extensionDependencies": [
+    "vscode.git"
+  ],
+  "activationEvents": [],
+  "scripts": {
+    "test": "node test.js",
+    "package": "npx -y @vscode/vsce package"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "claudeCommitMsg.generate",
+        "title": "Generate Commit Message with Claude",
+        "category": "Claude",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "claudeCommitMsg.selectModel",
+        "title": "Select Commit Message Model",
+        "category": "Claude"
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "claudeCommitMsg.generate",
+          "when": "scmProvider == git",
+          "group": "navigation"
+        },
+        {
+          "command": "claudeCommitMsg.selectModel",
+          "when": "scmProvider == git",
+          "group": "claude"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Claude Commit Message",
+      "properties": {
+        "claudeCommitMsg.prompt": {
+          "type": "string",
+          "editPresentation": "multilineText",
+          "default": "Write a concise git commit message for the diff on stdin.\n\nLook at the past 15 commit messages (`git log -15 --format=%B`) and match their style: Conventional Commits type, scope names, casing and language. If they follow no clear convention, use Conventional Commits.\n\n- Subject: imperative mood, under 72 characters, no trailing period.\n- Add a short body only when the change is not obvious from the subject: explain what changed and why, wrapped at 72 characters.\n- Describe only what the diff shows. Do not invent motivation, ticket numbers or trailers.",
+          "markdownDescription": "Instructions sent to Claude. The diff arrives on stdin. Claude may run read-only git commands (`git log`, `git show`, `git diff`, `git status`)."
+        },
+        "claudeCommitMsg.model": {
+          "type": "string",
+          "default": "claude-haiku-5-5",
+          "enum": [
+            "claude-haiku-5-5",
+            "claude-sonnet-5-5",
+            "claude-opus-5-5",
+            "claude-fable-5-2"
+          ],
+          "enumDescriptions": [
+            "Haiku 5.5: fastest and cheapest (default)",
+            "Sonnet 5.5: balanced",
+            "Opus 5.5: most capable, slower",
+            "Fable 5.2"
+          ],
+          "markdownDescription": "Model used to write commit messages. Pick one here or run **Claude: Select Commit Message Model**, which also accepts a custom model ID or alias."
+        },
+        "claudeCommitMsg.claudePath": {
+          "type": "string",
+          "default": "claude",
+          "markdownDescription": "Path to the `claude` CLI. Set the full path (for example `~/.local/bin/claude`) if it is not found on your login shell's `PATH`."
+        }
+      }
+    }
+  }
+}
