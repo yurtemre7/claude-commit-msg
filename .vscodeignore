@@ -3,3 +3,4 @@
 test.js
 *.vsix
 scripts/**
+.github/**

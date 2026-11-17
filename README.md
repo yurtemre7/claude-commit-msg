@@ -17,7 +17,7 @@ Write git commit messages from your diff, using the [Claude Code](https://docs.a
 
 ## Install locally
 
-The extension isn't on the Marketplace yet. To build and install it yourself (requires Node.js):
+Download the `.vsix` from the [latest release](https://github.com/yurtemre7/claude-commit-msg/releases/latest), or build it yourself (requires Node.js):
 
 ```sh
 git clone https://github.com/yurtemre7/claude-commit-msg.git
@@ -73,6 +73,22 @@ git diff --cached | claude -p --model claude-haiku-5-5 \
 ```
 
 Your Claude Code hooks are turned off for this call, so plugin output can't end up in the message. Any `Co-Authored-By:` trailer is removed from the result.
+
+## Releasing
+
+Publishing is automated by [`.github/workflows/publish.yml`](.github/workflows/publish.yml).
+
+**One-time setup:** create a Marketplace publisher and a Personal Access Token ([guide](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token)). Add the token as a repository secret named `VSCE_PAT` under **Settings → Secrets and variables → Actions → Secrets**.
+
+**Each release:**
+
+1. Bump `version` in `package.json` and add an entry to `CHANGELOG.md`.
+2. Commit, then tag and push:
+   ```sh
+   git tag v0.1.0 && git push origin main v0.1.0
+   ```
+
+The workflow runs the tests, checks that the tag matches the version, publishes to the Marketplace, and attaches the `.vsix` to a GitHub release.
 
 ## Disclaimer
 
