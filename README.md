@@ -8,6 +8,7 @@ Write git commit messages from your diff, using the [Claude Code](https://docs.a
 - **Fast and cheap:** uses Claude Haiku 5.5 by default.
 - **Matches your repo's style:** Claude reads your recent commit history first and follows its conventions.
 - **Read-only:** Claude can only run `git log`, `git show`, `git diff` and `git status`. It never commits, stages or edits files.
+- **Bring your own tool:** point the button at any local command instead, such as [fm-code](https://github.com/yurtemre7/fm-code) (macOS only), which writes commit messages with Apple's on-device model.
 
 ## Requirements
 
@@ -46,6 +47,22 @@ If the `code` command isn't available, open the Extensions view in VS Code, clic
 
 Haiku 5.5 is the default. To switch, run **Claude: Select Commit Message Model** from the Command Palette or the Source Control **⋯** menu, or pick one under `claudeCommitMsg.model` in Settings. The quick pick also accepts any custom model ID or alias that `claude --model` understands.
 
+## Using your own command instead of Claude
+
+Set `claudeCommitMsg.customCommand` in your user settings to run any local commit message tool when you click the button.
+
+**Try [fm-code](https://github.com/yurtemre7/fm-code) (macOS only):** it writes one-line Conventional Commit messages from your staged changes using Apple's on-device model, so nothing leaves your Mac and no account is needed. Install it, run `fm-code doctor` to check your setup, then set:
+
+```json
+"claudeCommitMsg.customCommand": "fm-code"
+```
+
+The command runs through your login shell in the repository root. It receives the same diff on stdin (it can ignore it), and whatever it prints goes into the commit box. When it is set, `prompt`, `model` and `claudePath` are ignored. Clear it to go back to Claude.
+
+Tools that read the index themselves (like `fm-code`) only see **staged** changes, so stage your changes first.
+
+This setting is only read from user settings, so a repository's `.vscode/settings.json` can't make the button run a command on your machine.
+
 ## Settings
 
 | Setting | Default | Description |
@@ -53,6 +70,7 @@ Haiku 5.5 is the default. To switch, run **Claude: Select Commit Message Model**
 | `claudeCommitMsg.prompt` | Concise; matches the last 15 commits, Conventional Commits fallback | Instructions sent to Claude. The diff arrives on stdin. |
 | `claudeCommitMsg.model` | `claude-haiku-5-5` | Model used for messages: Haiku 5.5, Sonnet 5.5, Opus 5.5 or Fable 5.2. |
 | `claudeCommitMsg.claudePath` | `claude` | Path to the `claude` CLI if it isn't on your login shell's `PATH`. |
+| `claudeCommitMsg.customCommand` | *(empty)* | Shell command to run instead of Claude, such as `fm-code`. Its output becomes the commit message. |
 
 The prompt can ask Claude to look at history, for example: *"Look at the last 30 commits and match their scope names."*
 

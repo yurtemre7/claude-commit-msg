@@ -1,8 +1,8 @@
 {
   "name": "claude-commit-msg",
   "displayName": "claude: commit msg!",
-  "description": "Generate git commit messages from your diff with your local Claude Code CLI (Haiku by default).",
-  "version": "0.1.2",
+  "description": "Generate git commit messages from your diff with your local Claude Code CLI (Haiku by default) or any custom command.",
+  "version": "0.2.0",
   "publisher": "yurtemre",
   "license": "MIT",
   "icon": "images/icon.png",
@@ -100,6 +100,12 @@
           "type": "string",
           "default": "claude",
           "markdownDescription": "Path to the `claude` CLI. Set the full path (for example `~/.local/bin/claude`) if it is not found on your login shell's `PATH`."
+        },
+        "claudeCommitMsg.customCommand": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "markdownDescription": "Run this shell command instead of Claude, for example `fm-code`. It runs through your login shell in the repository root, receives the diff on stdin (it may ignore it), and whatever it prints becomes the commit message. When set, `prompt`, `model` and `claudePath` are ignored. Leave empty to use Claude. Only user settings can set it, so a repository's `.vscode/settings.json` cannot run commands on your machine."
         }
       }
     }

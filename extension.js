@@ -1,5 +1,5 @@
 const vscode = require('vscode');
-const { getDiff, askClaude } = require('./claude');
+const { getDiff, askClaude, runCustom } = require('./claude');
 
 const INSTALL_URL = 'https://docs.anthropic.com/en/docs/claude-code/setup';
 
@@ -19,17 +19,24 @@ async function generate(arg) {
   if (!diff.trim()) return vscode.window.showInformationMessage('claude: commit msg! No changes to describe.');
 
   const cfg = vscode.workspace.getConfiguration('claudeCommitMsg');
-  await vscode.window.withProgress({ location: vscode.ProgressLocation.SourceControl, title: 'Claude is writing a commit message…' }, async () => {
+  const command = (cfg.get('customCommand') || '').trim();
+  const title = command ? `Running ${command}…` : 'Claude is writing a commit message…';
+  await vscode.window.withProgress({ location: vscode.ProgressLocation.SourceControl, title }, async () => {
     try {
-      const msg = await askClaude({ cwd, diff, prompt: cfg.get('prompt'), model: cfg.get('model'), claudePath: cfg.get('claudePath') });
-      if (!msg) throw new Error('Claude returned an empty message.');
+      const msg = command
+        ? await runCustom({ cwd, diff, command })
+        : await askClaude({ cwd, diff, prompt: cfg.get('prompt'), model: cfg.get('model'), claudePath: cfg.get('claudePath') });
+      if (!msg) throw new Error(command ? `\`${command}\` printed nothing.` : 'Claude returned an empty message.');
       repo.inputBox.value = msg;
     } catch (e) {
       const notFound = e.code === 127 || /command not found|no such file/i.test(e.stderr || '');
       const text = notFound
-        ? 'claude: commit msg! The `claude` CLI was not found. Install Claude Code, or set its full path in settings.'
+        ? (command
+          ? `claude: commit msg! The custom command \`${command}\` was not found. Check claudeCommitMsg.customCommand in settings.`
+          : 'claude: commit msg! The `claude` CLI was not found. Install Claude Code, or set its full path in settings.')
         : 'claude: commit msg! ' + ((e.stderr || '').trim() || e.message);
-      const pick = await vscode.window.showErrorMessage(text, ...(notFound ? ['Install Claude Code'] : []), 'Open Settings');
+      const actions = notFound && !command ? ['Install Claude Code', 'Open Settings'] : ['Open Settings'];
+      const pick = await vscode.window.showErrorMessage(text, ...actions);
       if (pick === 'Install Claude Code') vscode.env.openExternal(vscode.Uri.parse(INSTALL_URL));
       if (pick === 'Open Settings') vscode.commands.executeCommand('workbench.action.openSettings', 'claudeCommitMsg');
     }

@@ -2,6 +2,16 @@
 
 All notable changes to this extension are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.2.0] - 2026-11-18
+
+### Added
+
+- `claudeCommitMsg.customCommand` setting: run any local commit message tool (for example [fm-code](https://github.com/yurtemre7/fm-code) on macOS) instead of Claude when you click the button. The command runs through your login shell in the repository root, gets the diff on stdin, and its output fills the commit box. It can only be set in user settings, not in a repository's workspace settings.
+
+### Fixed
+
+- A command that exits without reading the diff on stdin no longer causes an EPIPE error.
+
 ## [0.1.2] - 2026-11-17
 
 ### Changed

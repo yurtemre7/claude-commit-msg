@@ -13,6 +13,8 @@ const run = (cmd, args, cwd, input) => new Promise((resolve, reject) => {
     err.stderr = stderr;
     reject(err);
   });
+  // ignore EPIPE when the command exits without reading stdin (e.g. tools that read the index themselves)
+  p.stdin.on('error', () => {});
   if (input !== undefined) p.stdin.end(input);
 });
 
@@ -31,4 +33,10 @@ async function askClaude({ cwd, diff, prompt, model, claudePath }) {
   return clean(out);
 }
 
-module.exports = { getDiff, askClaude, clean };
+// user's own command instead of claude, run through the login shell in the repo root; the diff is on stdin
+async function runCustom({ cwd, diff, command }) {
+  const shell = process.env.SHELL || '/bin/sh';
+  return (await run(shell, ['-lc', command], cwd, diff.slice(0, MAX_DIFF))).trim();
+}
+
+module.exports = { getDiff, askClaude, runCustom, clean };
